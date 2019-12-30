@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test</title>
+    <style type="text/css">
+        .red {
+            color: red;
+        }
+        .wrap {
+            flex-wrap: wrap;
+        }
+
+        .flex-start {
+            justify-content: flex-start;
+        }
+
+        .flex-end {
+            justify-content: flex-end;
+        }
+
+        .center {
+            justify-content: center;
+        }
+
+        .space-between {
+            justify-content: space-between;
+        }
+
+        .space-around {
+            justify-content: space-around;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+        /* Flex Container */
+        .container {
+            /* max-width: 420px; */
+            margin: 0 auto;
+            display: flex;
+            border: 1px solid #ccc;
+            margin-bottom:20px;
+        }
+
+        .column {
+            min-height: 200px;
+            flex-direction: column;
+        }
+
+        /* Flex Item */
+        .item {
+            margin: 5px;
+            padding: 10px;
+            background: #f4f4f4;
+            text-align: center;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 50%;
+            border: 1px solid #c3c3c3;
+            cursor:pointer;
+        }
+
+        .item.selected{
+            border: 1px solid #666666;
+        }
+
+        /* Indica que o conteúdo deve se expandir */
+        .flex {
+            flex: 1;
+        }
+
+        h1, h2, h3, h4, .title {
+            text-align: center;
+            margin: 20px 0 20px 0;
+            font-size: 1.3em;
+            font-weight: bold;
+
+        }
+
+        body {
+            font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-style:normal;
+            color: #444;
+        }
+
+        .form-input {
+            max-width: 80px;
+            padding: 10px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        .create-sequence {
+            width:100%;
+            display:flex;
+        }
+    </style>
+    <link rel="stylesheet" href="./table.css">
+</head>
+
+<body>
+    <div>
+        <div class="title" data-title-id="lotofacil">Loto Fácil</div>
+        <div data-content="lotofacil">
+            <label for="">
+                <input type="text" placeholder="10" data-action="lotofacil" class="form-input lastNumbers"
+                    title="Digite 0 para exibir todos" alt="Digite 0 para exibir todos" /> últimos concursos
+            </label>
+            <section class="container center wrap" data-id="lotofacil">
+            </section>
+            <label for="">
+                Criar <input type="text" placeholder="3" data-create="lotofacil" class="form-input totalGames" /> jogos com <input type="text" placeholder="15" data-create-qty="lotofacil" class="form-input totalNumbers" minlength="15" /> números
+            </label>
+            <section class="container center wrap" data-created="lotofacil">
+            
+            </section>
+        </div>
+    </div>
+    
+    
+    <div>
+        <div class="title" data-title-id="megasena">Mega Sena</div>
+        <div data-content="megasena">
+            <label for="">
+                <input type="text" placeholder="10" data-action="megasena" class="form-input lastNumbers"
+                    title="Digite 0 para exibir todos" alt="Digite 0 para exibir todos" /> últimos concursos
+            </label>
+            <section class="container center wrap" data-id="megasena">
+            </section>
+            <label for="">
+                Criar <input type="text" placeholder="4" data-create="megasena" class="form-input totalGames" /> jogos com <input type="text" placeholder="6" data-create-qty="megasena" class="form-input totalNumbers"  minlength="6" /> números
+            </label>
+            <section class="container center wrap" data-created="megasena">                  
+            </section>            
+        </div>
+    </div>
+
+    <script type="module">
+
+        import state from './js/state.js';
+        import { render } from './js/render.js';
+        import { createButtonVerifySequence } from './js/buttons/buttons.js';
+        
+        // listeners
+        import { initListenerVerifySequence } from './js/listeners/listeners.js';
+
+        //table
+        import tableResultVerifySequence from './js/table/tableResultVerifySequence.js'
+
+        // helper
+        import markNotSorted from './js/helper/markNotSorted.js';
+        
+        // services
+        import { fetchVerifySequence, fetchApiNumbers } from './js/requests/requests.js';
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+
+            let timer = false;
+
+            Array.from(document.querySelectorAll('.lastNumbers')).forEach((e) => {
+                e.addEventListener('keyup', (evt) => {
+                    evt.preventDefault();
+                    clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        const action = e.getAttribute('data-action');
+                        const limitView = Number(evt.target.value);
+                        
+                        // chama a api 
+
+                        fetchApiNumbers({
+                            action,
+                            limitView
+                        })
+                        .then(res => res.json())
+                        .then(response => {
+                            // const uniqueCount = [`'${response.data.split(",").join("','")}'`];
+                            
+                            let counts = [];
+                            let items = response.data.split(',');
+
+                            for (let item of items) {
+                                counts.push(item);
+                            }
+                            const uniqueCount = counts;
+                            
+                            let count = {};
+                            uniqueCount.forEach(function (i) {
+                                count[i] = (count[i] || 0) + 1;
+                            });
+
+                            const data = Object.entries(count);
+                            const nData = Object.values(data).sort(function (a, b) {
+                                return b[1] - a[1]
+                            })
+                            
+                            state.setState({
+                                apostas: { ...state.data.apostas, [action]: nData },
+                            });
+
+                            mount(action, nData).then((res) => {
+                                appendClick();
+                            }).catch((error) => {
+                                
+                            });
+                            
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            render(error);
+                        });
+
+                    }, 500)
+                });
+            });
+
+            Array.from(document.querySelectorAll('.title')).forEach((e) => {
+                e.addEventListener('click', (evt) => {
+                    let content = evt.target.getAttribute('data-title-id');
+                    let id = document.querySelector(`[data-content="${content}"`);
+                    
+                    Array.from(document.querySelectorAll('[data-content]')).forEach((item) => {
+                        if(item.getAttribute('data-content') !== content) {
+                            item.setAttribute('style', 'display:none');
+                        } 
+                    });     
+                    if(id.hasAttribute('style')) {
+                        id.removeAttribute('style');
+                    }              
+                    
+                });
+            });
+
+            Array.from(document.querySelectorAll('.totalNumbers')).forEach((e) => {
+                e.addEventListener('keyup', (evt) => {
+                    evt.preventDefault();
+
+                    clearTimeout(timer);
+
+                    timer = setTimeout(() => {
+                        // name = megasena, lotofacil
+                        const action = e.getAttribute('data-create-qty');
+                        const totalGames = document.querySelector(`[data-create='${action}']`).value;
+                        const totalNumbers = evt.target.value;
+
+                        console.log(`Criar: ${totalGames} jogos da ${action} com ${totalNumbers} números`);
+
+                        let myArray = state.data.apostas[action].slice(0, 25).map((item) => item[0]);
+
+                        function sortNumbers({ data, limit }) {
+                            const items = data.sort(function() {return 0.5 - Math.random() 
+                            });
+                            return items.slice(0, limit).sort((a, b) => a - b);
+                        }
+
+                        let numbersCreated = '';
+                        for(let i = 0; i < totalGames; i++) {
+                            console.log(i);
+                            numbersCreated += createSequence({ data: sortNumbers({ data: myArray, limit: totalNumbers }), activeId: i, action });
+                        }
+
+                        render(`[data-created='${action}']`, numbersCreated);
+                        initListenerVerifySequence();                                      
+                    }, 500);
+                    
+                });
+            });
+
+            const createDivAfterBtnVerify = ({ activeId, action }) => {
+                return `
+                    <div style="margin: 20px 0px 20px;width:100%;" id="result-${action}-${activeId}">
+                        <div>Resultado</div>
+                    </div>
+                `;
+            }
+
+            const createSequence = ({ data, activeId, action }) => {
+                
+                let renderHTML = `<div style="" class="create-sequence center">`;
+                let numbers = '';
+                let nums = '';
+
+                for(let item of data) {
+                    nums = item < 10 ? "0"+item : item;
+                    renderHTML += `<div class="item">${nums}</div>`;
+                    numbers += `${nums},`;
+                }
+                
+                numbers = numbers.slice(0, numbers.length-1);
+                renderHTML += `</div>`;
+                renderHTML += createButtonVerifySequence({ activeId, action, numbers });
+
+                renderHTML += createDivAfterBtnVerify({ activeId, action });
+                
+                return renderHTML;
+            }
+
+            const appendClick = () => {
+                Array.from(document.querySelectorAll('.item')).forEach((e) => e.addEventListener('click', (evt) => {
+
+                    let value = evt.target.innerText;
+                    let myState = state.data;
+
+                    if(myState.selected.megasena.includes(value)) {
+                        console.log('existe removendo');
+                        evt.target.classList.remove('selected');
+                        const newState = myState.selected.megasena.filter((item) => item !== value);
+                        state.setState({
+                            selected: { 
+                                ...state.selected, 
+                                ['megasena']: [...newState] 
+                            },
+                        });
+                        
+                    } else {
+
+                        state.setState({ 
+                            selected: { 
+                                ...state.selected,
+                                ['megasena']: [
+                                    ...myState.selected.megasena, 
+                                    value 
+                                    ]                                
+                                },
+                        });
+                        
+                        console.log('adiciondo');
+
+                        evt.target.classList.add('selected');
+                    }
+                    
+                }));
+            }
+
+            const mount = (id, data) => {
+                return new Promise((resolve, reject) => {
+                    try {
+                        let items = '';
+                        for (let item of data) {
+                            items +=
+                                `<div class="item" alt="${item[1]}" title="${item[1]} vezes">${item[0] < 10 ? '0'+item[0]: item[0]}</div>`
+                        }
+                        render(`[data-id='${id}']`, '');
+                        render(`[data-id='${id}']`, items); 
+                        resolve(true);
+                    } catch (error) {
+                        reject(error);
+                        console.log(error)
+                    }
+                });
+                               
+            }
+        });
+    </script>
+</body>
+
+</html>

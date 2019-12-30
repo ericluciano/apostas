@@ -1,0 +1,41 @@
+import { render } from '../render.js';
+
+const API = 'http://localhost:9000/api/';
+
+const fetchVerifySequence = ({ id, action, numbers }) => {
+    
+    const URL = `${API}/checkNumbers.php`;
+
+    return fetch(URL, {
+            method: 'POST',
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action, 
+                numbers
+            })
+        });
+        
+};
+
+const fetchApiNumbers = ({ action, limitView }) => {
+
+    render(action, 'carregando...');
+
+    const URL = `${API}/${action}.php`;
+
+    return fetch(URL, {
+        method: 'POST',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            limitView,
+        })
+    });
+};
+
+export { fetchVerifySequence, fetchApiNumbers };
