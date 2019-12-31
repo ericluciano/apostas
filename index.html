@@ -156,14 +156,22 @@
 
         // helper
         import markNotSorted from './js/helper/markNotSorted.js';
+        import sortNumbers from './js/helper/sortNumbers.js';
+        import probability from './js/helper/probability.js';
         
         // services
         import { fetchVerifySequence, fetchApiNumbers } from './js/requests/requests.js';
 
+        Array.prototype.pairs = function(limit) {
+            return this.sort((a, b) => 0.5 - Math.random()).filter((n) => n % 2 === 0).slice(0, limit)
+        }
+
+        Array.prototype.odd = function(limit) {
+            return this.sort((a, b) => 0.5 - Math.random()).filter((n) => n % 2 !== 0).slice(0, limit)
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
-
-
+            
             let timer = false;
 
             Array.from(document.querySelectorAll('.lastNumbers')).forEach((e) => {
@@ -198,12 +206,16 @@
                             });
 
                             const data = Object.entries(count);
+
                             const nData = Object.values(data).sort(function (a, b) {
                                 return b[1] - a[1]
                             })
                             
                             state.setState({
-                                apostas: { ...state.data.apostas, [action]: nData },
+                                apostas: { 
+                                    ...state.data.apostas, 
+                                    [action]: nData 
+                                },
                             });
 
                             mount(action, nData).then((res) => {
@@ -218,7 +230,7 @@
                             render(error);
                         });
 
-                    }, 500)
+                    }, 500);
                 });
             });
 
@@ -238,6 +250,7 @@
                     
                 });
             });
+            
 
             Array.from(document.querySelectorAll('.totalNumbers')).forEach((e) => {
                 e.addEventListener('keyup', (evt) => {
@@ -255,16 +268,23 @@
 
                         let myArray = state.data.apostas[action].slice(0, 25).map((item) => item[0]);
 
-                        function sortNumbers({ data, limit }) {
-                            const items = data.sort(function() {return 0.5 - Math.random() 
-                            });
-                            return items.slice(0, limit).sort((a, b) => a - b);
-                        }
-
                         let numbersCreated = '';
+                        let sortedNumbers = '';
+
                         for(let i = 0; i < totalGames; i++) {
                             console.log(i);
-                            numbersCreated += createSequence({ data: sortNumbers({ data: myArray, limit: totalNumbers }), activeId: i, action });
+                            sortedNumbers = sortNumbers({ data: myArray });
+                            
+                            numbersCreated += createSequence({ 
+                                data: probability({ 
+                                    key: Math.round(Math.random() * 2), 
+                                    data: sortedNumbers,
+                                    action,
+                                    limit: totalNumbers
+                                }),
+                                activeId: i,
+                                action 
+                            });
                         }
 
                         render(`[data-created='${action}']`, numbersCreated);
