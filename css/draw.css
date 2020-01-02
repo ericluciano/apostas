@@ -1,0 +1,65 @@
+.contentDraw {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:center;    
+    width:100%;
+    margin: 0px 0px 20px;
+  }
+  
+  .draw {
+    max-width:300px;
+    border-radius: 10px;
+    -webkit-box-shadow:inset 0px 0px 0px 1px purple;
+    -moz-box-shadow:inset 0px 0px 0px 1px purple;
+    box-shadow:inset 0px 0px 0px 1px purple;
+    margin: 10px;
+  }
+  
+  .draw .name {
+    font-size:1em;
+    background: purple;
+    padding:16px;
+    color:white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display:flex;
+    justify-content: space-between;
+    font-size: 0.765em;
+    text-transform: uppercase;
+  }
+  
+  .draw .numbers {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    margin-top: 20px;    
+  }
+  
+  
+  .draw .numbers .balls{
+    padding: 10px;
+    border-radius: 20%;
+    margin: 6px;
+    color: #444;
+    font-size: 0.875em;
+    font-weight:bold;
+    background: #f6f6f6;
+  }
+  
+  .draw .numbers .balls.drawn {
+    background: rgba(13, 160, 55, 0.58);
+    color: white;
+  }
+
+.draw .total {
+  display:flex;
+  justify-content:center;  
+  color:#777;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  padding:10px;
+  font-weight:bold;
+  font-size: 0.765em;
+  text-transform: uppercase;
+  margin: 10px 0px;
+}

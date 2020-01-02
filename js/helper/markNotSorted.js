@@ -14,6 +14,6 @@ const markNotSorted = ({ sorted, numbers }) => {
     }
 
     return numbers;
-}
+};
 
 export default markNotSorted;
