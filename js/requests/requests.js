@@ -1,6 +1,6 @@
 import { render } from '../render.js';
 
-const API = 'http://localhost:9000/api/';
+const API = `${window.location.href}api/`;
 
 const fetchVerifySequence = ({ id, action, numbers }) => {
     
