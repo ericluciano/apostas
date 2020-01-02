@@ -2,6 +2,20 @@ import { fetchVerifySequence } from '../requests/requests.js';
 import { createDraw } from '../draw/createDraw.js';
 import { render } from '../render.js';
 
+const initCloseBtnVerify = (e) => { 
+        // handle click
+        function handler(evt) {
+            evt.preventDefault();            
+            const id = evt.target.getAttribute('data-btn-show-result');
+            render(`#${id}`, '');
+            evt.target.classList.add('hide');
+            // remove listener individual
+            e.removeEventListener('click', handler, false);
+        }
+
+        e.addEventListener('click', handler, false);
+}
+
 const initListenerVerifySequence = () => {
     Array.from(document.querySelectorAll('.btnVerifySequence')).forEach((e) => e.addEventListener('click', (evt) => {
         evt.preventDefault();
@@ -24,6 +38,8 @@ const initListenerVerifySequence = () => {
             }
             render(`#${id}`, toRender);
             evt.target.classList.remove('loading');
+            evt.target.nextElementSibling.classList.remove('hide');
+            initCloseBtnVerify(evt.target.nextElementSibling);
         })
         .catch((error) => {
             console.log('initListenerVerifySequence', error);

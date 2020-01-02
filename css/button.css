@@ -1,8 +1,16 @@
 
 .preBtnVerifyResult {
+    max-width:250px;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
     margin: 20px 0px 20px;
 }
-.btnVerifySequence {
+.btnCloseVerify.hide {
+    display: none;
+}
+
+.button {
     max-width: 300px;
     box-sizing:border-box;
     outline: 0;
@@ -14,18 +22,19 @@
     font-weight:bold;
     background-color:rgba(28, 129, 217, 0.68);
     text-transform:uppercase;
+    margin:0px 2px;
     /* important */
     position: relative;
     transition: padding-left .3s ease-out;
 }
-.btnVerifySequence:hover {
+.button:hover {
     background-color:rgba(28, 129, 217, 0.58);
 }
 
-.btnVerifySequence.loading {
+.button.loading {
     padding-left: 24px;
 }
-.btnVerifySequence.loading:after {
+.button.loading:after {
     content: "";
     position: absolute;
     border-radius: 100%;
