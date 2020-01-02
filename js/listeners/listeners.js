@@ -1,5 +1,5 @@
 import { fetchVerifySequence } from '../requests/requests.js';
-import tableResultVerifySequence from '../table/tableResultVerifySequence.js';
+import { createDraw } from '../draw/createDraw.js';
 import { render } from '../render.js';
 
 const initListenerVerifySequence = () => {
@@ -15,8 +15,12 @@ const initListenerVerifySequence = () => {
         fetchVerifySequence({ id, action, numbers })
         .then(res => res.json())
         .then(response => {
-            let tables = tableResultVerifySequence({ rows: response.data });
-            render(`#${id}`, tables);
+            let toRender = 'Nenhum concurso com a sequência acima teve 13 ou mais acertos.';
+            if(response.data.length) {
+                let tables = createDraw({ rows: response.data });                
+                toRender = tables.split(',').join('');
+            }
+            render(`#${id}`, toRender);
         })
         .catch((error) => {
             console.log('initListenerVerifySequence', error);

@@ -28,8 +28,6 @@ const tableResultVerifySequence = ({ rows }) => {
                     <td class="column2">${data.concurso}</td>
                     <td class="column3">${data.totalFounds}</td>
                     <td class="column4" style="padding:10px 0px 10px">
-                        ${data.sorted.split(",").sort((a, b) => a-b)}
-                        <br />
                         ${markNotSorted({ 
                             sorted: data.sorted.split(','), 
                             numbers: data.all_numbers.split(',').sort((a, b) => a - b) })}

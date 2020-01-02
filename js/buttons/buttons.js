@@ -8,20 +8,23 @@ const style = document.createElement('style');
     }
     .btnVerifySequence {
         max-width: 300px;
-        border: 1px solid #c4c4c4;
         padding: 10px;
         border-radius: 4px;
         cursor: pointer;
+        color: #fff;
+        font-size:0.875em;
+        font-weight:bold;
+        background-color:rgba(28, 129, 217, 0.68);
     }
     .btnVerifySequence:hover {
-        background-color: #f4f4f4;
+        background-color:rgba(28, 129, 217, 0.58);
     }
   `;
 document.head.appendChild(style);
 
 const createButtonVerifySequence = ({ activeId, action, numbers }) => {
     return `<div class="preBtnVerifyResult" class="flex w-100 center">
-        <div data-btn-show-result="result-${action}-${activeId}" data-btn-numbers="${numbers}" data-btn-action="${action}" class="btnVerifySequence">verificar sequência</div>
+        <div data-btn-show-result="result-${action}-${activeId}" data-btn-numbers="${numbers}" data-btn-action="${action}" class="btnVerifySequence">verificar </div>
     </div>`;
 };
 
