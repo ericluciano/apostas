@@ -3,11 +3,15 @@ require "vendor/autoload.php";
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$dsn = $_ENV['PDO'];
- 
+$db = $_ENV["DB"];
+
+$dsn = $_ENV[$db];
+$username = $_ENV["{$db}_USER"];
+$password = $_ENV["{$db}_PASS"];
+
 try{
  // create a PostgreSQL database connection
- $pdo = new PDO($dsn);
+ $pdo = new PDO($dsn, $username, $password);
  
  // display a message if connected to the PostgreSQL successfully
  if($pdo){
