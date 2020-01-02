@@ -1,3 +1,9 @@
+/**
+ * Marca os números sorteados
+ * 
+ * @param {array} param.sorted 
+ * @param {array} param.numbers 
+ */
 const markSorted = ({ sorted, numbers }) => {
                     
     let items = [];
@@ -8,13 +14,9 @@ const markSorted = ({ sorted, numbers }) => {
     });
 
     for (let i in numbers) {
-        if(items.includes(numbers[i])){
-            numbers[i] = `<div class="balls drawn">${numbers[i]}</div>`; 
-        } else {
-            numbers[i] = `<div class="balls">${numbers[i]}</div>`; 
-        }
+        numbers[i] = `<div class="balls ${items.includes(numbers[i]) ? 'drawn': ''}">${numbers[i]}</div>`;         
     }
-    console.log(numbers);
+
     return numbers;
 };
 

@@ -50,6 +50,7 @@ $nn = [];
 array_push($nn, $newQueries[0], $newQueries[1]);
 
 function insertMultipleRows($data, $pdo) {
+    
     $stmt = $pdo->prepare("INSERT INTO apostas.lotofacil (concurso, data, bola_1, bola_2, bola_3, bola_4, bola_5, bola_6, bola_7, bola_8, bola_9, bola_10, bola_11, bola_12, bola_13, bola_14, bola_15, all_numbers) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         try {
             $pdo->beginTransaction();

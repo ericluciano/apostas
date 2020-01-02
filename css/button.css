@@ -1,0 +1,54 @@
+
+.preBtnVerifyResult {
+    margin: 20px 0px 20px;
+}
+.btnVerifySequence {
+    max-width: 300px;
+    box-sizing:border-box;
+    outline: 0;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+    font-size:0.775em;
+    font-weight:bold;
+    background-color:rgba(28, 129, 217, 0.68);
+    text-transform:uppercase;
+    /* important */
+    position: relative;
+    transition: padding-left .3s ease-out;
+}
+.btnVerifySequence:hover {
+    background-color:rgba(28, 129, 217, 0.58);
+}
+
+.btnVerifySequence.loading {
+    padding-left: 24px;
+}
+.btnVerifySequence.loading:after {
+    content: "";
+    position: absolute;
+    border-radius: 100%;
+    left: 6px;
+    top: 50%;
+    width: 0px;
+    height: 0px;
+    margin-top: -2px;
+    border: 2px solid rgba(255,255,255,0.5);
+    border-left-color: #FFF;
+    border-top-color: #FFF;
+    animation: spin .6s infinite linear, grow .3s forwards ease-out;
+}
+@keyframes spin { 
+    to {
+        transform: rotate(359deg);
+    }
+}
+@keyframes grow { 
+    to {
+        width: 10px;
+        height: 10px;
+        margin-top: -8px;
+        left: 6px;
+    }
+}
