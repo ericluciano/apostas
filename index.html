@@ -101,6 +101,10 @@
             width:100%;
             display:flex;
         }
+
+        .hide-title {
+            display:none;
+        }
     </style>
     <link rel="stylesheet" href="./table.css">
     <link rel="stylesheet" href="./css/draw.css">
@@ -110,6 +114,7 @@
 <body>
     <div>
         <div class="title" data-title-id="lotofacil">Loto Fácil</div>
+        <hr />
         <div data-content="lotofacil">
             <label for="">
                 <input type="text" placeholder="10" data-action="lotofacil" class="form-input lastNumbers"
@@ -129,6 +134,7 @@
     
     <div>
         <div class="title" data-title-id="megasena">Mega Sena</div>
+        <hr />
         <div data-content="megasena">
             <label for="">
                 <input type="text" placeholder="10" data-action="megasena" class="form-input lastNumbers"
@@ -243,12 +249,10 @@
                     
                     Array.from(document.querySelectorAll('[data-content]')).forEach((item) => {
                         if(item.getAttribute('data-content') !== content) {
-                            item.setAttribute('style', 'display:none');
+                            item.classList.add('hide-title');
                         } 
                     });     
-                    if(id.hasAttribute('style')) {
-                        id.removeAttribute('style');
-                    }              
+                    id.classList.toggle('hide-title');          
                     
                 });
             });
