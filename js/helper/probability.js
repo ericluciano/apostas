@@ -1,3 +1,9 @@
+/**
+ * Retorna a probabilidade
+ * 
+ * @param {object} param
+ * 
+ */
 const probability = ({ key, data, action, limit }) => {
 
     const actions = {

@@ -100,6 +100,8 @@
         .create-sequence {
             width:100%;
             display:flex;
+            margin: 20px;
+            flex-wrap:wrap;
         }
 
         .hide-title {
@@ -156,6 +158,8 @@
         import { render } from './js/render.js';
         import { createButtonVerifySequence } from './js/buttons/buttons.js';
         
+        // padrões lotofacil
+        import { lotoFacilPatterns } from './js/patterns/config.js';
         // listeners
         import { initListenerVerifySequence } from './js/listeners/listeners.js';
 
@@ -166,6 +170,9 @@
         import markNotSorted from './js/helper/markNotSorted.js';
         import sortNumbers from './js/helper/sortNumbers.js';
         import probability from './js/helper/probability.js';
+        import sumDozens from './js/helper/sumDozens.js';
+        import { countNumbersPrime } from './js/helper/primeNumbers.js';
+        import { countNumbersInFibo } from './js/helper/fiboNumbers.js';
         
         // services
         import { fetchVerifySequence, fetchApiNumbers } from './js/requests/requests.js';
@@ -309,7 +316,9 @@
             }
 
             const createSequence = ({ data, activeId, action }) => {
-                
+                function setPattern({ sumNumbers, primeNumbers, fiboNumbers }) {
+                    return `<div class="w-100 flex center">fibo: ${fiboNumbers}, primos: ${primeNumbers}, soma: ${sumNumbers}</div>`;
+                }
                 let renderHTML = `<div style="" class="create-sequence center">`;
                 let numbers = '';
                 let nums = '';
@@ -322,11 +331,26 @@
                 
                 numbers = numbers.slice(0, numbers.length-1);
                 renderHTML += `</div>`;
-                renderHTML += createButtonVerifySequence({ activeId, action, numbers });
 
+                // cria btn para verificar sequência
+                renderHTML += createButtonVerifySequence({ activeId, action, numbers });
+                
+                // cria div para renderizar a verificação
                 renderHTML += createDivAfterBtnVerify({ activeId, action });
                 
-                return renderHTML;
+                let results = '';
+                if(action === 'lotofacil') {
+                    // calcula imprime os padrões
+                    results = setPattern({
+
+                        sumNumbers: sumDozens(numbers.split(',')),
+                        primeNumbers: countNumbersPrime(numbers.split(',')),
+                        fiboNumbers: countNumbersInFibo(numbers.split(',')),
+                    }) + renderHTML;
+                } else {
+                    results = renderHTML;
+                }
+                return results;
             }
 
             const appendClick = () => {
