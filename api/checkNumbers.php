@@ -23,23 +23,28 @@ function check($data, $numbers, $action) {
     }
 }
 
-function checkResult($pdo, $action, $numbers) {
+function checkResult($pdo, $action, $numbers, $concurso) {
     $result = [];
     $table = "apostas.{$action}";
-    $stmt = $pdo->query("SELECT * FROM $table;");
+    $where = '';
+    if($concurso > 0) {
+        $where = "WHERE concurso = " . $concurso;
+    }
+    
+    $stmt = $pdo->query("SELECT * FROM $table $where;");
     while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
         $result[] = check($row, $numbers, $action);
     }
-
     return array_values(array_filter($result));    
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
 $numbers = str_replace(",", "|", $data["numbers"]);
 $action = $data["action"];
+$concurso = (int)$data["concurso"];
 
 if(validTables($action)) {
-    $response = ["data" => checkResult($pdo, $action, $numbers)];    
+    $response = ["data" => checkResult($pdo, $action, $numbers, $concurso)];    
 } else {
     $response = "action not performed";
 }

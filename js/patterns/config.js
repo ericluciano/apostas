@@ -3,7 +3,11 @@ const lotoFacilPatterns = {
     sumDozens: {
         1: [180, 194],
         2: [195, 209],
-        3: [210, 224]
+        3: [210, 224],
+        trend: {
+            min: 180,
+            max: 224,
+        }
     },
     evenAndOdd: {
         1: [7, 8],

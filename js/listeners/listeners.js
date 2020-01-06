@@ -25,10 +25,11 @@ const initListenerVerifySequence = () => {
         const id = e.getAttribute('data-btn-show-result');
         const numbers = e.getAttribute('data-btn-numbers');
         const action = e.getAttribute('data-btn-action');
+        const concurso = evt.target.parentNode.querySelector(`[data-concurso="${id}"]`).value;
 
-        console.log(id, numbers, action);
+        console.log(id, numbers, action, concurso);
 
-        fetchVerifySequence({ id, action, numbers })
+        fetchVerifySequence({ id, action, numbers, concurso })
         .then(res => res.json())
         .then(response => {
             let toRender = 'Nenhum concurso com a sequência acima teve 13 ou mais acertos.';

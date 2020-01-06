@@ -2,7 +2,7 @@ import { render } from '../render.js';
 
 const API = `${window.location.href}api`;
 
-const fetchVerifySequence = ({ id, action, numbers }) => {
+const fetchVerifySequence = ({ id, action, numbers, concurso }) => {
     
     const URL = `${API}/checkNumbers.php`;
 
@@ -14,7 +14,8 @@ const fetchVerifySequence = ({ id, action, numbers }) => {
             },
             body: JSON.stringify({
                 action, 
-                numbers
+                numbers,
+                concurso
             })
         });
         
