@@ -94,18 +94,47 @@
             max-width: 80px;
             padding: 10px;
             font-size: 1em;
-            margin-bottom: 20px;            
+            margin-bottom: 20px; 
+            border-radius: 6px;
+            border: 1px solid #c4c4c4;           
+        }
+
+        .form-input-inside {
+            max-width: 60px;
+            padding: 10px;
+            font-size: 0.875em;
+            margin-bottom: 10px;            
+            margin-right:10px;
+            border-radius: 6px;
+            border: 1px solid #c4c4c4;   
+            margin-top:10px;
         }
 
         .create-sequence {
             width:100%;
             display:flex;
-            margin: 20px;
+            margin: 10px 0px 20px;
             flex-wrap:wrap;
         }
 
         .hide-title {
             display:none;
+        }
+        .tags{
+            padding: 6px;
+            font-size: 0.715em;
+            text-transform: uppercase;
+            margin: 10px 10px;
+            font-weight: bold;
+            border-radius: 5%;
+            letter-spacing: 0.04em;
+        }
+
+        .tags.inside {
+            background: rgba(13, 160, 55, 0.18);
+        }
+        .tags.not-inside {
+            background: rgba(184, 44, 44, 0.4);
         }
     </style>
     <link rel="stylesheet" href="./table.css">
@@ -171,6 +200,7 @@
         import sortNumbers from './js/helper/sortNumbers.js';
         import probability from './js/helper/probability.js';
         import sumDozens from './js/helper/sumDozens.js';
+        import isInsidePattern from './js/helper/isInsidePattern.js';
         import { countNumbersPrime } from './js/helper/primeNumbers.js';
         import { countNumbersInFibo } from './js/helper/fiboNumbers.js';
         
@@ -317,7 +347,29 @@
 
             const createSequence = ({ data, activeId, action }) => {
                 function setPattern({ sumNumbers, primeNumbers, fiboNumbers }) {
-                    return `<div class="w-100 flex center">fibo: ${fiboNumbers}, primos: ${primeNumbers}, soma: ${sumNumbers}</div>`;
+                    let fibo = isInsidePattern({ 
+                        pattern: 'fibo',
+                        num: fiboNumbers,
+                        text: 'Fibonacci',
+                        action: 'lotofacil'
+                    });
+                    let primos = isInsidePattern({ 
+                        pattern: 'prime',
+                        num: primeNumbers,
+                        action: 'lotofacil'
+                    });
+
+                    let soma = isInsidePattern({ 
+                        pattern: 'sum',
+                        num: sumNumbers,
+                        action: 'lotofacil'
+                    });
+
+                    return `<div class="w-100 flex center">
+                        ${fibo}
+                        ${primos}
+                        ${soma}
+                        </div>`;
                 }
                 let renderHTML = `<div style="" class="create-sequence center">`;
                 let numbers = '';
